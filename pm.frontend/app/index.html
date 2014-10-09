@@ -1,0 +1,338 @@
+<!doctype html>
+<html class="no-js">
+  <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta http-equiv="X-UA-Compatible" content="IE=8;">
+
+      <title>Portal da Monitoração</title>
+
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="description" content="">
+      <meta name="author" content="Interface - Produban - Santander - Brasil">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="bower_components/ng-table/ng-table.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/geral.css">
+    <link rel="stylesheet" href="styles/ie8.css">
+    <link rel="stylesheet" href="styles/media-queries.css">
+    <!-- endbuild -->
+
+      <!-- Fav and touch icons -->
+      <link rel="shortcut icon" href="ico/favicon.ico">
+      <link rel="shortcut icon" type="image/x-icon" href="ico/favicon.ico">
+      <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
+      <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
+
+      <!--[if lt IE 9]>
+      <script src="bower_components/html5shiv/dist/html5shiv.js"></script>
+      <![endif]-->
+  </head>
+  <body ng-app="pmApp">
+      <!-- Modais -->
+      <div class="loading" id="Load" style="display: none;"></div>
+      <div class="loading loading2" id="Load2" style="display: none;"></div>
+      <div class="loading loading3" id="Load3" style="display: none;"></div>
+      <div class="loading loading4" id="Load4" style="display: none;"></div>
+      <div class="loading loading5" id="Load5" style="display:none;"></div>
+      <div class="loading loading6" id="Load6" style="display:none;"></div>
+      <div class="loading loading7" id="Load7" style="display:none;"></div>
+      <div class="loading loading10" id="Load10" style="display:none;"></div>
+
+      <!-- /Modais -->
+      <loginmodal user="user"></loginmodal>
+
+      <!-- Modal Editar Dados -->
+      <div class="modal fade" id="ModalEditarDados" tabindex="-1" role="dialog" aria-labelledby="MensagemLabel" aria-hidden="true">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
+                      <h4 class="modal-title" id="H2">Alterar Dados</h4>
+                  </div>
+                  <div class="modal-body">
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-danger pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"> </span> Cancelar</button>
+                      <button type="button" class="btn btn-success" data-dismiss="modal"><span class="glyphicon glyphicon-ok"> </span> Salvar</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!-- Modal Editar Dados -->
+
+      <!-- Menu Principal -->
+      <div id="MenuTopo" class="menu-topo" role="navigation">
+          <div class="bloco-menu bg-azul" onmouseover="showmenu('submenu1');" onmouseout="hidemenu('submenu1');">
+              <a  title="Capacity" rel="tooltip" data-placement="right">
+                  <span><img src="img/conteudo/icones/83x83/grafico.png" alt="Capacity" /></span>
+              </a>
+              <div class="submenu bg-azul show" id="submenu1">
+                  <h3>Capacity</h3>
+                  <form role="search" id="searchform">
+                      <div class="input-group top10 bottom10">
+                          <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+                          <input type="text" class="form-control" placeholder="Pesquisar" />
+                      </div>
+                  </form>
+                  <div class="list-group">
+                      <a  class="list-group-item">Consulta</a>
+                      <a href="capacity/console/index.html" class="list-group-item">Console</a>
+                      <a  class="list-group-item">Visão Serviço</a>
+                  </div>
+              </div>
+          </div>
+          <div class="bloco-menu bg-rosa" onmouseover="showmenu('submenu2');" onmouseout="hidemenu('submenu2');">
+              <a title="Central Administrativa" rel="tooltip" data-placement="right">
+                  <img src="img/conteudo/icones/83x83/admin.png" alt="Central Administrativa" />
+              </a>
+              <div class="submenu bg-rosa" id="submenu2">
+                  <h3>CENTRAL ADMINISTRATIVA</h3>
+                  <form role="search" id="Form1">
+                      <div class="input-group top10 bottom10">
+                          <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+                          <input type="text" class="form-control" placeholder="Pesquisar" />
+                      </div>
+                  </form>
+                  <div class="list-group">
+                      <!--<a  class="list-group-item">Administração Servidores<span class="badge">9</span></a>
+                      <a  class="list-group-item">Administração Usuários<span class="badge">3</span></a>
+                      <a  class="list-group-item">Administração Serviços<span class="badge">5</span></a>
+                      <a  class="list-group-item">Aplicação</a>
+                      <a  class="list-group-item">Categorias</a>
+                      <a  class="list-group-item">Clientes</a>
+                      <a  class="list-group-item">Grupo Executor</a>
+                      <a  class="list-group-item">Parâmetros de Execução</a>
+                      <a  class="list-group-item">Primeiro Nível</a>
+                      <a  class="list-group-item">Sistemas</a>
+                      <a  class="list-group-item">Sub-Categorias</a>
+                      <a  class="list-group-item">Tipo de Suporte</a>
+                      <a  class="list-group-item">Grupos de E-mails</a>-->
+                  </div>
+              </div>
+          </div>
+          <div class="bloco-menu bg-verde-escuro" onmouseover="showmenu('submenu3');" onmouseout="hidemenu('submenu3');">
+              <a title="Central de Alarmes" rel="tooltip" data-placement="right">
+                  <img src="img/conteudo/icones/83x83/alarme.png" alt="Central de Alarmes" />
+              </a>
+              <div class="submenu bg-verde-escuro" id="submenu3">
+                  <h3>Central de Alarmes</h3>
+                  <form role="search" id="Form2">
+                      <div class="input-group top10 bottom10">
+                          <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+                          <input type="text" class="form-control" placeholder="Pesquisar" />
+                      </div>
+                  </form>
+                  <div class="list-group">
+                      <a href="central-de-alarmes/console/index.html" class="list-group-item">Console</a>
+                      <a href="central-de-alarmes/console-historica/index.html" class="list-group-item">Console Histórica</a>
+                      <a class="list-group-item">Monitoração Serviços</a>
+                      <a class="list-group-item">Serviços</a>
+                      <a href="#collapseProcedimentos" class="list-group-item" data-toggle="collapse">Procedimentos<span class="badge">2</span></a>
+                      <div id="collapseProcedimentos" class="panel-collapse collapse">
+                          <a href="central-de-alarmes/procedimentos/index.html" class="list-group-item">Listagem de Procedimentos</a>
+                          <a href="central-de-alarmes/procedimentos/cadastro-de-procedimento.html" class="list-group-item">Cadastro de Procedimentos</a>
+                      </div>
+                      <a class="list-group-item">Servidores em Manutenção</a>
+                      <a class="list-group-item">Configurar Abertura de Ticket</a>
+                      <a class="list-group-item">Relatórios</a>
+                  </div>
+              </div>
+          </div>
+          <div class="bloco-menu bg-azul-escuro" onmouseover="showmenu('submenu4');" onmouseout="hidemenu('submenu4');">
+              <a title="CMDB" rel="tooltip" data-placement="right">
+                  <img src="img/conteudo/icones/83x83/cmdb.png" alt="CMDB" />
+              </a>
+              <div class="submenu bg-azul-escuro" id="submenu4">
+                  <h3>CMDB</h3>
+                  <form role="search" id="Form3">
+                      <div class="input-group top10 bottom10">
+                          <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+                          <input type="text" class="form-control" placeholder="Pesquisar" />
+                      </div>
+                  </form>
+              </div>
+          </div>
+          <div class="bloco-menu bg-verde" onmouseover="showmenu('submenu5');" onmouseout="hidemenu('submenu5');">
+              <a title="Controle de Agentes" rel="tooltip" data-placement="right">
+                  <img src="img/conteudo/icones/83x83/controle-de-agentes.png" alt="Controle de Agentes" />
+              </a>
+              <div class="submenu bg-verde" id="submenu5">
+                  <h3>Controle de Agentes</h3>
+                  <form role="search" id="Form4">
+                      <div class="input-group top10 bottom10">
+                          <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+                          <input type="text" class="form-control" placeholder="Pesquisar" />
+                      </div>
+                  </form>
+              </div>
+          </div>
+          <div class="bloco-menu bg-roxo" onmouseover="showmenu('submenu6');" onmouseout="hidemenu('submenu6');">
+              <a title="Relatórios" rel="tooltip" data-placement="right">
+                  <img src="img/conteudo/icones/83x83/relatorios.png" alt="Relatórios" />
+              </a>
+              <div class="submenu bg-roxo" id="submenu6">
+                  <h3>Relatórios</h3>
+                  <form role="search" id="Form6">
+                      <div class="input-group top10 bottom10">
+                          <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+                          <input type="text" class="form-control" placeholder="Pesquisar" />
+                      </div>
+                  </form>
+              </div>
+          </div>
+          <div class="bloco-menu bg-amarelo" onmouseover="showmenu('submenu7');" onmouseout="hidemenu('submenu7');">
+              <a title="Central de Monitoração" rel="tooltip" data-placement="right">
+                  <img src="img/conteudo/icones/83x83/monitoracao.png" alt="Central de Monitoração" />
+              </a>
+              <div class="submenu bg-amarelo" id="submenu7">
+                  <h3>Central de Monitoração</h3>
+                  <form role="search" id="Form5">
+                      <div class="input-group top10 bottom10">
+                          <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+                          <input type="text" class="form-control" placeholder="Pesquisar" />
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+      <!-- /Menu Principal -->
+      <!-- Topo fixo -->
+      <div class="navbar navbar-default navbar-fixed-top">
+          <div class="container-fluid">
+              <div class="row">
+                  <div class="col-md-6 topo">
+                      <div class="pull-left">
+                          <a href="javascript:void(0);" class="btn btn-menu btn-xs" id="BtnMostrarMenu" title="Menu" rel="tooltip"><img src="img/conteudo/icones/menu.png" alt="Menu" /></a>
+                      </div>
+                      <h1 class="pull-left"><a href="index.html" title="Portal da Monitoração" rel="tooltip">PORTAL <span>MONITORAÇÃO</span></a></h1>
+                  </div>
+                  <div class="col-md-6 text-right top5">
+                      <!-- Box Status Usuário -->
+                      <div class="box-info-user" ng-controller="UserCtrl">
+                          <a href="javascript:void(0);" id="btnInfoUsuario" class="btn btn-success btn-xs" title="Disponível" rel="tooltip"><span class="glyphicon glyphicon-user"></span></a>
+                          <div class="popover left" role="tooltip" id="info-user" style="display:none;">
+                              <div class="arrow"></div>
+                              <div class="popover-title">
+                                  <h3>{{user.cn}}</h3>
+                                  <div class="dropdown">
+                                      <a data-toggle="dropdown">
+                                          <img src="img/conteudo/icones/verde-mini.png"  />
+                                          (Disponível)
+                                          <span class="caret"></span>
+                                      </a>
+                                      <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                          <li><img src="img/conteudo/icones/verde-mini.png"  /> Disponível</li>
+                                          <li><img src="img/conteudo/icones/amarelo-mini.png"  /> Ausente</li>
+                                          <li><img src="img/conteudo/icones/vermelho-mini.png" /> Ocupado</li>
+                                      </ul>
+                                  </div>
+                              </div>
+                              <div class="popover-content">
+                                  <div class="pull-left porcento25">
+                                      <img src="img/conteudo/icones/user.png" class="img-thumbnail" />
+                                      <a href="#ModalEditarDados" data-toggle="modal" rel="tooltip" title="Editar dados" class="btn btn-xs" style="padding:0!important;">Editar dados</a>
+                                  </div>
+                                  <div class="pull-right porcento70">
+                                      <p>{{user.username}}</p>
+                                      <p>{{user.mail}}</p>
+                                      <p>{{user.phone}}</p>
+                                      <p>Ultimo acesso: {{user.lastLogin | date:"dd/MM/yyyy 'às' h:mma"}}</p>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <!-- /Box Status Usuário -->
+                      <a href="index.html" class="btn btn-default btn-xs" title="Home" rel="tooltip"><span class="glyphicon glyphicon-home"></span></a>
+                      <a href="javascript:window.print();" class="btn btn-default btn-xs hidden-xs" title="Imprimir" rel="tooltip"><span class="glyphicon glyphicon-print"></span></a>
+                      <a href="javascript:void(0);" onclick="$(document).fullScreen(true)" id="btnFullScreen" class="btn btn-default btn-xs hidden-xs" title="Visualizar em fullscreen" rel="tooltip"><span class="glyphicon glyphicon-fullscreen"></span></a>
+                      <a ng-controller="LoginController" href="javascript:void(0);" ng-click="logout()" class="btn btn-default btn-xs hidden-xs" title="Logout" rel="tooltip"><span class="glyphicon glyphicon-log-out"></span></a>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <div id="bgMenu" class="loading"></div><!-- Background do menu -->
+
+      <div ng-view=""></div>
+
+      <footer>
+          <div class="logo-gesfe"><a title="Gestão de Ferramentas" rel="tooltip"><img src="img/usercontrols/rodape/logo-gesfe.png" alt="Gestão de Ferramentas" /></a></div>
+          <p>Gestão de Ferramentas - Produban - Brasil</p>
+          <div class="logo-produban"><a  title="Produban" rel="tooltip"><img src="img/usercontrols/rodape/logo-produban.png" alt="Produban" /></a></div>
+      </footer>
+
+    <!-- build:js(.) scripts/oldieshim.js -->
+    <!--[if lt IE 9]>
+    <script src="bower_components/es5-shim/es5-shim.js"></script>
+    <script src="bower_components/json3/lib/json3.js"></script>
+    <![endif]-->
+    <!-- endbuild -->
+
+    <!-- build:js(.) scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <!--<script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/affix.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/alert.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/button.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/carousel.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/collapse.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/dropdown.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/tab.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/transition.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/scrollspy.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/modal.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/tooltip.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/popover.js"></script>-->
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-touch/angular-touch.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-hateoas/src/angular-hateoas.js"></script>
+    <script src="bower_components/lodash/dist/lodash.compat.js"></script>
+    <script src="bower_components/restangular/dist/restangular.js"></script>
+    <script src="bower_components/ngstorage/ngStorage.js"></script>
+    <script src="bower_components/oauth-ng/dist/oauth-ng.js"></script>
+    <script src="bower_components/angular-http-auth/src/http-auth-interceptor.js"></script>
+    <script src="bower_components/angular-timer/dist/angular-timer.js"></script>
+    <script src="bower_components/ng-table/ng-table.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/respond/dest/respond.src.js"></script>
+      <script src="bower_components/angular-strap/dist/angular-strap.js"></script>
+      <script src="bower_components/angular-strap/dist/angular-strap.tpl.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+      <script src="js/scripts.js"></script>
+      <script src="js/jquery.fullscreen-min.js"></script>
+      <script src="js/jquery.maskedinput.js"></script>
+
+        <!-- build:js({.tmp,app}) scripts/scripts.js -->
+        <script src="scripts/app.js"></script>
+        <script src="scripts/controllers/main.js"></script>
+        <script src="scripts/controllers/alerts.js"></script>
+        <script src="scripts/services/alert.js"></script>
+        <script src="scripts/services/user.js"></script>
+        <script src="scripts/controllers/login.js"></script>
+        <script src="scripts/directives/loginmodal.js"></script>
+        <script src="scripts/controllers/user.js"></script>
+        <script src="scripts/directives/criticidade.js"></script>
+        <script src="scripts/directives/status.js"></script>
+        <script src="scripts/directives/slabar.js"></script>
+        <script src="scripts/services/status.js"></script>
+        <script src="scripts/services/env.js"></script>
+        <script src="scripts/services/atribuicao.js"></script>
+        <script src="scripts/directives/atribuicao.js"></script>
+        <!-- endbuild -->
+
+</body>
+</html>

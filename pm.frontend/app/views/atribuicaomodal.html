@@ -1,0 +1,19 @@
+<!-- Modal Mensagem -->
+<div class="modal" tabindex="-1" role="dialog" aria-labelledby="MensagemLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" ng-show="title">
+                <button type="button" class="close" ng-click="$hide()">&times;</button>
+                <h4 class="modal-title" id="H2">Atenção!</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger" role="alert">Deseja atribuir o seu usuário como responsável pelo alerta?</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger pull-left" ng-click="$hide()"><span class="glyphicon glyphicon-remove"> </span> Cancelar</button>
+                <button type="button" class="btn btn-success" ng-click="takeAlert()"><span class="glyphicon glyphicon-ok"> </span> Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Mensagem -->

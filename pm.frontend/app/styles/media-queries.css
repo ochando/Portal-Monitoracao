@@ -1,0 +1,13 @@
+﻿@media (max-width: 992px) {
+    .menu-topo .boxes-coloridos div img { margin: 40% auto;}    
+    .bg-verde-escuro .indicadores-topo .indicador { margin-bottom:20px; padding-bottom:0;}  
+    .bg-verde-escuro .indicadores-topo .indicador p { margin-bottom:0;}    
+}
+
+@media (max-width: 1200px) {
+    .bg-verde-escuro .indicadores-topo .indicador .pull-left { width:100%;}
+    .bg-verde-escuro .indicadores-topo .indicador .pull-left img { display:block; margin:0 auto;}
+    .bg-verde-escuro .indicadores-topo .indicador h3, .indicadores-topo .indicador p { text-align:center!important;}
+    .bg-verde-escuro .indicadores-topo .indicador { padding:10px;} 
+   
+}

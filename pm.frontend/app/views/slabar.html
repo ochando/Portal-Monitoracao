@@ -1,0 +1,8 @@
+<div class="progress">
+    <div class="progress-bar" ng:class="{true:'progress-bar-success', false:'progress-bar-danger'}[barsize<50]" role="progressbar" style="width: {{ barsize}}%">
+        <timer start-time="startTime">
+            <span><span ng-show="days>0">{{days}}D </span>{{hours}}:{{mminutes}}:{{sseconds}}</span>
+        </timer>
+    </div>
+</div>
+
