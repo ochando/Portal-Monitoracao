@@ -1,110 +1,117 @@
 package pm;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.logging.Logger;
+
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
-import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
-import org.springframework.security.web.util.AntPathRequestMatcher;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.sql.DataSource;
-import java.beans.ConstructorProperties;
-import java.io.IOException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 @Configuration
-@EnableWebMvcSecurity
+@EnableWebSecurity
+@EnableJpaRepositories
+@EnableJpaAuditing
+@ComponentScan
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private DataSource dataSource;
+	@Autowired
+	private DataSource dataSource;
 
-    @Autowired
-    private RestAuthenticationEntryPoint authenticationEntryPoint;
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(new PmUserDetailsService(dataSource));
+	}
 
-    //@Autowired
-    //private AuthSuccessHandler authSuccessHandler;
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.authorizeRequests().anyRequest().hasRole("USER").and().formLogin().permitAll().and().logout().permitAll();
+	}
 
-    @Autowired
-    private AuthFailureHandler authFailureHandler;
-    @Autowired
-    private HttpLogoutSuccessHandler logoutSuccessHandler;
+	private static final class PmUserDetailsService implements UserDetailsService {
 
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
+		private static final Logger log = Logger.getLogger(PmUserDetailsService.class.getName());
 
-    @Bean
-    @Override
-    public UserDetailsService userDetailsServiceBean() throws Exception {
-        return super.userDetailsServiceBean();
-    }
+		private final DataSource dataSource;
 
-    /*@Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        //authenticationProvider.setUserDetailsService(userDetailsService);
-        authenticationProvider.setPasswordEncoder(new ShaPasswordEncoder());
+		public PmUserDetailsService(DataSource dataSource) {
+			super();
+			this.dataSource = dataSource;
+		}
 
-        return authenticationProvider;
-    }*/
+		@Override
+		public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+			log.info("Use name: " + username);
+			JdbcTemplate template = new JdbcTemplate(dataSource);
+			List<UserDetails> userDetails = template.query(new PmPreparedStatementCreator(username), new PmRowMapper());
+			if (userDetails.isEmpty()) {
+				throw new UsernameNotFoundException(username);
+			}
+			return userDetails.get(0);
+		}
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+	}
 
-        http.csrf().disable()
-                //.authenticationProvider(authenticationProvider())
-                .exceptionHandling()
-                .authenticationEntryPoint(authenticationEntryPoint)
-                .and()
-                .formLogin()
-                .permitAll()
-                //.loginProcessingUrl(LOGIN_PATH)
-                //.usernameParameter(USERNAME)
-                //.passwordParameter(PASSWORD)
-                //.successHandler(authSuccessHandler)
-                .failureHandler(authFailureHandler)
-                .and()
-                .logout()
-                .permitAll()
-                //.logoutRequestMatcher(new AntPathRequestMatcher(LOGIN_PATH, "DELETE"))
-                .logoutSuccessHandler(logoutSuccessHandler)
-                .and()
-                .sessionManagement()
-                .maximumSessions(1);
+	private static final class PmRowMapper implements RowMapper<UserDetails> {
 
-        http.authorizeRequests().anyRequest().authenticated();
+		private static final List<GrantedAuthority> DEFAULT_AUTHORITY = new LinkedList<GrantedAuthority>() {
+			private static final long serialVersionUID = 1L;
 
+			{
+				add(new SimpleGrantedAuthority("ROLE_USER"));
+			}
+		};
 
-    }
+		@Override
+		public UserDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
+			String username = rs.getString("username");
+			String password = rs.getString("password");
+			boolean enabled = rs.getInt("enabled") == 1;
+			User user = new User(username, password, enabled, true, true, true, DEFAULT_AUTHORITY);
+			return user;
+		}
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .jdbcAuthentication()
-                .dataSource(dataSource)
-                ;
+	}
+	
+	private static final class PmPreparedStatementCreator implements PreparedStatementCreator{
 
+		private final static String SQL = "select username, password, enabled from users where username = ?";
 
-    }
+		private final String username;
+		
+		public PmPreparedStatementCreator(String username) {
+			super();
+			this.username = username;
+		}
+
+		@Override
+		public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+			PreparedStatement prepareStatement = con.prepareStatement(SQL);
+			prepareStatement.setString(1, username);
+			return prepareStatement;
+		}
+		
+	}
+
 }

@@ -1,15 +1,17 @@
 package pm.models;
 
-import org.springframework.beans.factory.annotation.Required;
-
-import javax.persistence.*;
-import javax.smartcardio.ATR;
-import javax.validation.Constraint;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 /**
  * Created by dumorango on 22/09/14.
@@ -17,7 +19,12 @@ import java.util.List;
 @Entity
 public class Alert extends AbstractEntity implements Serializable{
 
-    @Id
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 

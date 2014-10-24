@@ -1,82 +1,145 @@
 package pm.models;
 
-import org.apache.tomcat.jni.Time;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.Type;
 
 /**
  * Created by dumorango on 23/09/14.
  */
 @Entity
 @Table(name = "users")
-public class User extends AbstractEntity{
+public class User extends AbstractEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+	public User() {
+	}
 
-    @NotNull
-    private String username;
+	public User(String username, String password, boolean enabled) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.enabled = enabled;
+	}
 
-    private String password;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id")
+	private Long pk;
 
-    private String cn;
+	@NotNull
+	@Column(unique = true)
+	private String username;
 
-    private String mail;
+	private String password;
 
-    private String phone;
+	private String cn;
 
-    private Date lastLogin;
+	private String mail;
 
-    public User() {}
+	private String phone;
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	private Date lastLogin;
 
-    public String getCn() {
-        return cn;
-    }
+	@Column(nullable = false)
+	@Type(type = "org.hibernate.type.NumericBooleanType")
+	private boolean enabled;
 
-    public void setCn(String cn) {
-        this.cn = cn;
-    }
+	public Long getPk() {
+		return pk;
+	}
 
-    public String getMail() {
-        return mail;
-    }
+	public void setPk(Long pk) {
+		this.pk = pk;
+	}
 
-    public void setMail(String mail) {
-        this.mail = mail;
-    }
+	public String getUsername() {
+		return username;
+	}
 
-    public String getUsername() {
-        return username;
-    }
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public String getPhone() {
-        return phone;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
+	public String getCn() {
+		return cn;
+	}
 
-    public Date getLastLogin() {
-        return lastLogin;
-    }
+	public void setCn(String cn) {
+		this.cn = cn;
+	}
 
-    public void setLastLogin(Date lastLogin) {
-        this.lastLogin = lastLogin;
-    }
+	public String getMail() {
+		return mail;
+	}
+
+	public void setMail(String mail) {
+		this.mail = mail;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public Date getLastLogin() {
+		return lastLogin;
+	}
+
+	public void setLastLogin(Date lastLogin) {
+		this.lastLogin = lastLogin;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((pk == null) ? 0 : pk.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (pk == null) {
+			if (other.pk != null)
+				return false;
+		} else if (!pk.equals(other.pk))
+			return false;
+		return true;
+	}
+
 }
