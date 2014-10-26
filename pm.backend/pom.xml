@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.springframework</groupId>
-    <artifactId>gs-accessing-data-rest</artifactId>
+    <artifactId>pm.backend</artifactId>
     <version>0.1.0</version>
 
     <dependencies>
@@ -148,6 +148,13 @@
             <version>9.3-1101-jdbc4</version>
         </dependency>
         
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.181</version>
+        </dependency>
+
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
