@@ -201,7 +201,7 @@
                         </resource>
                     </webResources>
 
-                    <warName>pm.backend</warName>
+                    <warName>pmapi</warName>
 
                 </configuration>
             </plugin>
